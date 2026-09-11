@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#8e0e18">
+<title>烧乌龟 · Siang Wen & Jocelyn</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;overflow-x:hidden}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  color:#fff7df;
+  background:#6e0812;
+  -webkit-text-size-adjust:100%;
+}
+button{font:inherit}
+#app{
+  width:100%;
+  min-height:100svh;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 23%,rgba(255,218,118,.34),transparent 25%),
+    linear-gradient(180deg,#b71925 0%,#8f1019 48%,#5e0710 100%);
+}
+#app:before{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 12% 30%,rgba(255,231,155,.18) 0 1px,transparent 2px),
+    radial-gradient(circle at 82% 18%,rgba(255,231,155,.14) 0 1px,transparent 2px);
+  background-size:46px 52px,61px 67px;
+  opacity:.8;
+}
+
+/* Traditional wedding frame */
+.frame{
+  position:absolute;inset:8px;
+  border:2px solid #d9a83f;
+  border-radius:22px;
+  pointer-events:none;
+  box-shadow:inset 0 0 0 2px rgba(255,222,128,.18);
+}
+.frame:before,.frame:after{
+  content:"囍";
+  position:absolute;top:7px;
+  color:#f7d46c;font-family:serif;font-size:30px;font-weight:900;
+}
+.frame:before{left:10px}.frame:after{right:10px}
+
+/* Hanging lanterns */
+.lantern{
+  position:absolute;top:-4px;z-index:2;width:66px;height:94px;
+  background:linear-gradient(90deg,#8c0915,#d82a2e 45%,#8c0915);
+  border:2px solid #e9bc50;border-radius:34px 34px 20px 20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.28);
+  animation:sway 3.2s ease-in-out infinite;
+}
+.lantern:before{
+  content:"囍";position:absolute;inset:18px 0 auto;text-align:center;
+  color:#ffd969;font:900 34px Georgia,serif;
+}
+.lantern:after{
+  content:"";position:absolute;left:50%;bottom:-23px;width:30px;height:25px;
+  transform:translateX(-50%);
+  background:repeating-linear-gradient(90deg,#e5ad39 0 3px,transparent 3px 7px);
+}
+.lantern.left{left:14px}.lantern.right{right:14px;animation-delay:-1.4s}
+
+/* Header */
+.header{
+  position:relative;z-index:3;
+  text-align:center;padding:19px 22px 0;
+}
+.mini{font-size:10px;letter-spacing:2.5px;color:#ffd66d;font-weight:800}
+h1{
+  margin:3px 0 2px;font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(30px,9.5vw,48px);line-height:1.04;color:#ffe08a;
+  text-shadow:0 2px 0 #7c0810,0 4px 12px rgba(0,0,0,.25);
+}
+.names{font-size:clamp(18px,5.5vw,27px);font-weight:900;color:#fff4cf}
+.names span{color:#ffd35d;padding:0 5px}
+.date{margin-top:4px;font-size:11px;color:#ffdca0;letter-spacing:1px}
+.ornament{margin:7px auto 4px;display:flex;align-items:center;justify-content:center;gap:7px;color:#f6c54e}
+.ornament i{width:42px;height:1px;background:linear-gradient(90deg,transparent,#e8b64b)}
+.ornament b{font-family:serif;font-size:19px}
+
+/* Wish badges */
+.wishes{
+  position:relative;z-index:3;
+  display:flex;justify-content:center;gap:7px;flex-wrap:wrap;
+  padding:0 15px;margin:4px auto 4px;
+}
+.wish{
+  padding:5px 10px;border:1px solid rgba(255,218,117,.5);
+  border-radius:999px;background:rgba(82,3,11,.35);
+  color:#ffe6a3;font-family:serif;font-size:11px;font-weight:800;
+}
+
+/* Game area */
+.game{
+  position:relative;z-index:3;
+  width:min(430px,100%);
+  height:calc(min(100svh,860px) - 205px);
+  min-height:500px;
+  max-height:650px;
+  margin:0 auto;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  overflow:hidden;
+}
+.wood-sign{
+  position:absolute;left:50%;top:10px;z-index:6;
+  width:min(260px,68vw);padding:9px 14px 11px;
+  transform:translateX(-50%) rotate(-1deg);
+  color:#6b210d;
+  background:linear-gradient(#ffe9a8,#f6c95c);
+  border:3px solid #a96519;border-radius:13px;
+  box-shadow:0 5px 0 #6d260f,0 9px 20px rgba(0,0,0,.2);
+}
+.wood-sign .label{font:800 11px Georgia,serif;letter-spacing:1px}
+.wood-sign .counter{font:900 clamp(37px,12vw,57px)/.95 Georgia,serif;color:#a40e18;text-shadow:0 2px #ffe8a0}
+.wood-sign .smallwish{font:800 10px Georgia,serif;color:#7e270f}
+
+/* Chinese wedding couple */
+
+.groom-person{left:16px}
+.bride-person{right:16px}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.bride-smile{top:23px}
+
+
+
+
+
+/* Fire altar */
+.altar{
+  position:absolute;left:50%;bottom:19px;z-index:4;
+  width:290px;height:275px;transform:translateX(-50%);
+}
+.fire-glow{
+  position:absolute;left:50%;bottom:112px;width:235px;height:190px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse,#ffcb4d 0,rgba(255,96,0,.35) 35%,transparent 70%);
+  filter:blur(5px);animation:glow .8s ease-in-out infinite alternate;
+}
+.flames{position:absolute;left:50%;bottom:97px;width:235px;height:205px;transform:translateX(-50%);z-index:3}
+.flame{
+  position:absolute;bottom:0;left:50%;
+  width:104px;height:180px;transform:translateX(-50%);
+  background:linear-gradient(#ffe98a 2%,#ff9d16 42%,#f0380d 100%);
+  clip-path:polygon(50% 0,67% 23%,78% 43%,100% 68%,84% 100%,55% 91%,30% 100%,0 69%,20% 43%,34% 27%);
+  filter:drop-shadow(0 0 8px #ff7b0a);
+  animation:fire .48s ease-in-out infinite alternate;
+}
+.flame:before{
+  content:"";position:absolute;left:50%;bottom:4px;width:65px;height:135px;
+  transform:translateX(-50%);
+  background:linear-gradient(#fff5b5,#ffd43d 45%,#ff7010);
+  clip-path:polygon(50% 0,77% 34%,100% 67%,76% 100%,50% 89%,22% 100%,0 65%,27% 34%);
+}
+.flame.small{width:62px;height:125px;opacity:.95}
+.flame.left{margin-left:-79px;transform:rotate(-12deg);animation-delay:-.15s}
+.flame.right{margin-left:79px;transform:rotate(12deg);animation-delay:-.32s}
+.flame.back{width:48px;height:112px;margin-left:-30px;bottom:10px;opacity:.9;animation-delay:-.25s}
+.ember{
+  position:absolute;width:5px;height:10px;border-radius:50%;background:#ffd66c;
+  box-shadow:0 0 8px #ff5c00;animation:ember 1.6s linear infinite;
+}
+.e1{left:37%;bottom:160px}.e2{left:62%;bottom:190px;animation-delay:-.7s}.e3{left:51%;bottom:215px;animation-delay:-1.1s}.e4{left:70%;bottom:145px;animation-delay:-1.4s}
+
+.cauldron{
+  position:absolute;left:50%;bottom:0;z-index:6;
+  width:260px;height:145px;transform:translateX(-50%);
+  background:linear-gradient(105deg,#3c211a,#9a5423 26%,#5a2c1b 58%,#b46a2b 80%,#3a2019);
+  border:4px solid #c48a3a;border-radius:16px 16px 70px 70px/18px 18px 45px 45px;
+  box-shadow:inset 0 -20px 25px rgba(0,0,0,.35),0 12px 18px rgba(0,0,0,.35);
+}
+.cauldron:before{
+  content:"福";position:absolute;left:50%;top:47px;transform:translateX(-50%) rotate(0deg);
+  width:60px;height:60px;border:2px solid #d99a35;display:grid;place-items:center;
+  color:#f6cf66;font:900 36px Georgia,serif;background:rgba(82,18,11,.45);
+}
+.rim{
+  position:absolute;left:50%;top:-17px;z-index:8;
+  width:288px;height:42px;transform:translateX(-50%);
+  border:5px solid #d1973d;border-radius:50%;
+  background:#160c09;box-shadow:0 0 22px rgba(255,101,0,.6),inset 0 5px 7px #5c2918;
+}
+.handle{position:absolute;top:36px;width:52px;height:68px;border:11px solid #b5782d;border-radius:50%;z-index:-1}
+.handle.left{left:-34px}.handle.right{right:-34px}
+
+/* Paper */
+.paper{
+  position:absolute;left:50%;top:87px;z-index:8;
+  width:min(190px,53vw);height:125px;transform:translateX(-50%) rotate(-3deg);
+  background:
+    linear-gradient(105deg,transparent 63%,rgba(120,65,18,.09)),
+    repeating-linear-gradient(transparent 0 22px,rgba(170,105,42,.16) 23px 24px),
+    #fff0bd;
+  border:2px solid #d49b43;
+  box-shadow:0 7px 16px rgba(0,0,0,.25);
+  color:#2d1b13;
+}
+.paper .paper-title{font:900 10px/1 Georgia,serif;color:#a10d17;margin-top:7px}
+.paper svg{position:absolute;left:9%;top:22px;width:82%;height:90px}
+.paper svg *{fill:none;stroke:#111;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.paper svg .eye{fill:#111}
+
+/* Burn effects */
+.burn-ring{
+  position:absolute;left:50%;bottom:106px;z-index:9;width:50px;height:50px;
+  transform:translateX(-50%) scale(.3);border-radius:50%;
+  border:4px solid #ffce55;opacity:0;pointer-events:none;
+}
+.burn-ring.active{animation:ring .8s ease-out forwards}
+.plus{
+  position:absolute;left:50%;bottom:277px;z-index:15;
+  transform:translateX(-50%);font:900 38px Georgia,serif;color:#ffe36e;
+  text-shadow:0 2px 0 #8b130f,0 0 12px #ff6a00;opacity:0;pointer-events:none;
+}
+.plus.active{animation:plus .95s ease-out forwards}
+.ash{
+  position:absolute;z-index:14;width:5px;height:7px;background:#3a2a25;border-radius:2px;
+  pointer-events:none;opacity:0;
+}
+.ash.active{animation:ash .85s ease-out forwards}
+
+/* Petals / confetti */
+.petal{
+  position:absolute;z-index:1;width:10px;height:16px;border-radius:80% 20% 80% 20%;
+  background:#f6a7a5;opacity:.85;animation:petal linear infinite;
+}
+.p1{left:18%;top:33%;animation-duration:5.5s}.p2{left:74%;top:28%;animation-duration:6.3s;animation-delay:-2s}.p3{left:43%;top:39%;animation-duration:5.9s;animation-delay:-4s}.p4{left:86%;top:55%;animation-duration:6.8s;animation-delay:-3s}.p5{left:8%;top:61%;animation-duration:7s;animation-delay:-1s}
+
+/* Bottom wish */
+.footer-wish{
+  position:relative;z-index:5;text-align:center;margin:-4px auto 7px;
+  padding:0 20px;color:#ffe2a1;
+}
+.footer-wish strong{display:block;font-family:serif;font-size:14px}
+.footer-wish span{font-size:10px;opacity:.8}
+button{
+  position:relative;z-index:20;display:block;margin:0 auto 17px;
+  min-height:48px;padding:10px 25px;border:2px solid #f2c85b;border-radius:999px;
+  background:linear-gradient(#d73532,#9f1019);color:#fff0bd;font-weight:900;
+  box-shadow:0 5px 0 #5d0710,0 8px 18px rgba(0,0,0,.25);
+  -webkit-tap-highlight-color:transparent;
+}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #5d0710}
+
+
+@keyframes glow{from{transform:translateX(-50%) scale(.9);opacity:.65}to{transform:translateX(-50%) scale(1.1);opacity:1}}
+@keyframes fire{from{transform:translateX(-50%) scaleX(.91) scaleY(.95) rotate(-3deg)}to{transform:translateX(-50%) scaleX(1.08) scaleY(1.08) rotate(4deg)}}
+@keyframes ember{0%{opacity:0;transform:translate(0,15px) scale(.6)}15%{opacity:1}100%{opacity:0;transform:translate(25px,-125px) scale(.1)}}
+@keyframes petal{0%{opacity:0;transform:translate3d(0,-10px,0) rotate(0)}15%{opacity:.85}100%{opacity:0;transform:translate3d(55px,270px,0) rotate(260deg)}}
+@keyframes ring{0%{opacity:0;transform:translateX(-50%) scale(.3)}25%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(2.2)}}
+@keyframes plus{0%{opacity:0;transform:translate(-50%,20px) scale(.5)}22%{opacity:1;transform:translate(-50%,0) scale(1.15)}100%{opacity:0;transform:translate(-50%,-75px) scale(1)}}
+@keyframes ash{0%{opacity:0;transform:translate(0,0) scale(.4) rotate(0)}25%{opacity:1}100%{opacity:0;transform:translate(var(--dx),-90px) scale(.1) rotate(160deg)}}
+
+.paper.burning{
+  animation:paperBurn 1.15s cubic-bezier(.35,.02,.6,1) forwards!important;
+}
+@keyframes paperBurn{
+  0%{opacity:1;transform:translate(-50%,0) rotate(-3deg) scale(1);filter:none}
+  22%{opacity:1;transform:translate(-50%,62px) rotate(7deg) scale(.94);filter:sepia(.35) saturate(1.3)}
+  48%{opacity:1;transform:translate(-50%,132px) rotate(-8deg) scale(.78);filter:sepia(.8) saturate(2.7) brightness(.88)}
+  70%{opacity:.72;transform:translate(-50%,198px) rotate(8deg) scale(.58);filter:sepia(1) saturate(4) brightness(.62)}
+  87%{opacity:.35;transform:translate(-50%,244px) rotate(-10deg) scale(.35);filter:sepia(1) saturate(5) brightness(.35)}
+  100%{opacity:0;transform:translate(-50%,285px) rotate(17deg) scale(.08);filter:brightness(.05)}
+}
+.paper.burning:after{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 25% 55%,transparent 0 6px,#5a2514 7px 10px,transparent 11px),
+             radial-gradient(circle at 70% 35%,transparent 0 7px,#5a2514 8px 12px,transparent 13px);
+  mix-blend-mode:multiply;opacity:0;animation:burnholes 1.15s linear forwards;
+}
+@keyframes burnholes{0%,30%{opacity:0}55%{opacity:.25}75%{opacity:.7}100%{opacity:1}}
+
+@media(max-width:380px){
+  .header{padding-top:17px}
+  .lantern{width:57px;height:84px}.lantern:before{font-size:29px}
+  .game{min-height:485px;height:calc(min(100svh,760px) - 190px)}
+  .wood-sign{top:7px}
+</style>
+</head>
+<body>
+<main id="app">
+  <div class="frame"></div>
+  <div class="lantern left"></div><div class="lantern right"></div>
+
+  <header class="header">
+    <div class="mini">囍 · WEDDING CELEBRATION · 囍</div>
+    <h1>烧乌龟</h1>
+    <div class="names">Siang Wen <span>♥</span> Jocelyn</div>
+    <div class="date">12 SEPTEMBER 2026 · SAUJANA HOTEL GARDEN</div>
+    <div class="ornament"><i></i><b>囍</b><i></i></div>
+  </header>
+
+  <div class="wishes">
+    <div class="wish">百年好合</div>
+    <div class="wish">永结同心</div>
+    <div class="wish">万事顺利</div>
+    <div class="wish">幸福美满</div>
+  </div>
+
+  <section class="game" id="game" aria-label="Interactive wedding turtle burning game">
+    <div class="wood-sign">
+      <div class="label">🐢 TURTLES BURNT 🐢</div>
+      <div class="counter" id="count">0</div>
+      <div class="smallwish">福 · 好运连连 · 福</div>
+    </div>
+
+    
+
+    <div class="petal p1"></div><div class="petal p2"></div><div class="petal p3"></div><div class="petal p4"></div><div class="petal p5"></div>
+
+    <div class="paper" id="paper" aria-hidden="true">
+      <div class="paper-title">吉祥纸 · TURTLE</div>
+      <svg viewBox="0 0 220 110">
+        <ellipse cx="100" cy="58" rx="63" ry="34"/>
+        <path d="M45 59c-14-12-27-8-30 2-3 10 9 17 23 14"/>
+        <circle class="eye" cx="25" cy="56" r="2.5"/>
+        <path d="M45 38c18-18 67-24 99 0"/>
+        <path d="M45 78c19 18 66 22 99 0"/>
+        <path d="M72 33c-8 12-8 27 5 37-13 8-12 20-3 31"/>
+        <path d="M110 27c-12 12-12 27 0 38-12 10-12 24 0 37"/>
+        <path d="M145 37c8-15 23-20 33-12 10 8 6 21-7 27"/>
+        <circle cx="174" cy="32" r="2.5"/>
+        <path d="M67 86c-13 10-11 20 0 20 9 0 13-8 13-18"/>
+        <path d="M128 87c13 10 14 20 2 20-9 0-14-8-14-18"/>
+        <path d="M190 47l13-5m-12 12 15 1"/>
+      </svg>
+    </div>
+
+    <div class="altar">
+      <div class="fire-glow"></div>
+      <div class="flames">
+        <div class="flame small left"></div>
+        <div class="flame small right"></div>
+        <div class="flame back"></div>
+        <div class="flame"></div>
+      </div>
+      <div class="ember e1"></div><div class="ember e2"></div><div class="ember e3"></div><div class="ember e4"></div>
+      <div class="cauldron">
+        <div class="handle left"></div><div class="handle right"></div>
+        <div class="rim"></div>
+      </div>
+    </div>
+
+    <div class="burn-ring" id="ring"></div>
+    <div class="plus" id="plus">+1</div>
+    <div id="ashes"></div>
+  </section>
+
+  <div class="footer-wish">
+    <strong>愿你们百年好合 · May your love last a lifetime</strong>
+    <span>Tap anywhere to send another turtle into the fire 🔥</span>
+  </div>
+  <button type="button" id="burnButton">🔥 烧乌龟 · BURN TURTLE 🔥</button>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var root=document.getElementById("app");
+  var game=document.getElementById("game");
+  var paper=document.getElementById("paper");
+  var count=document.getElementById("count");
+  var plus=document.getElementById("plus");
+  var ring=document.getElementById("ring");
+  var ashes=document.getElementById("ashes");
+  var button=document.getElementById("burnButton");
+  var busy=false;
+
+  function animate(el, cls){
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  }
+
+  function makeAshes(){
+    for(var i=0;i<7;i++){
+      var a=document.createElement("span");
+      a.className="ash active";
+      a.style.left=(46+Math.random()*12)+"%";
+      a.style.bottom=(105+Math.random()*35)+"px";
+      a.style.setProperty("--dx",((Math.random()-.5)*100)+"px");
+      a.style.animationDelay=(Math.random()*.12)+"s";
+      ashes.appendChild(a);
+      setTimeout(function(x){return function(){if(x.parentNode)x.parentNode.removeChild(x)}}(a),1000);
+    }
+  }
+
+  function burn(){
+    if(busy)return;
+    busy=true;
+
+    count.textContent=String((parseInt(count.textContent,10)||0)+1);
+    animate(plus,"active");
+    animate(ring,"active");
+
+    paper.classList.remove("burning");
+    paper.style.animation="none";
+    void paper.offsetWidth;
+    paper.style.animation="";
+    paper.classList.add("burning");
+
+    setTimeout(makeAshes,620);
+
+    setTimeout(function(){
+      paper.classList.remove("burning");
+      paper.style.opacity="";
+      busy=false;
+    },1160);
+  }
+
+  // One action path for both iPhone Safari and desktop.
+  root.addEventListener("click",function(e){
+    if(button.contains(e.target)||game.contains(e.target)) burn();
+  });
+
+  root.addEventListener("touchend",function(e){
+    if(button.contains(e.target)||game.contains(e.target)){
+      e.preventDefault();
+      burn();
+    }
+  },{passive:false});
+})();
+</script>
+</body>
+</html>
